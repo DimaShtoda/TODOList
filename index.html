@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>To-do list application</title>
+</head>
+
+<body>
+    <div class="tasks-wrapper">
+
+        <header class="tasks-header">
+            <a href="#">
+                TODOList
+            </a>
+        </header>
+
+        <div class="tasks-content">
+
+            <section>
+                <div class="filter-conditional">
+                    <div>
+                        <div class="search">
+                            <input type="text" placeholder="search by tittle" />
+                            <img class="icon" src="./images/search.png" alt="">
+                        </div>
+                    </div>
+                    <div class="filter-status">
+                        <select>
+                            <option>all</option>
+                            <option>open</option>
+                            <option>done</option>
+                        </select>
+                    </div>
+                    <div class="filter-priority">
+                        <select>
+                            <option>all</option>
+                            <option>high</option>
+                            <option>normal</option>
+                            <option>low</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <button class="bordered-button search-button" id="createButton"
+                            onclick="createForm()">Create</button>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="task-list line-container">
+                    <div class="task-list-item bordered" id="task-list-item-first">
+                        <div class="title-description">
+                            <div class="task-title margened-bottom" id="task_title">
+                                <p id="paragraph-title-first">!!!Title</p>
+                            </div>
+                            <div class="task-description margened-bottom">
+                                <p id="paragraph-description-first">!!!Description</p>
+                            </div>
+                        </div>
+                        <div class="line-container down-stick">
+                            <div class="task-priority" id="priority-first">
+                                !!!Priority
+                            </div>
+                            <button class="bordered-button" id="options-first" onclick="showOptions(this)">...</button>
+                        </div>
+                    </div>
+
+                    <div class="task-list-item bordered" id="task-list-item-second">
+                        <div class="title-description">
+                            <div class="task-title margened-bottom" id="task_title">
+                                <p id="paragraph-title-second">!!!Title</p>
+                            </div>
+                            <div class="task-description margened-bottom">
+                                <p id="paragraph-description-second">!!!Description</p>
+                            </div>
+                        </div>
+                        <div class="line-container down-stick">
+                            <div class="task-priority" id="priority-second">
+                                !!!Priority
+                            </div>
+                            <button class="bordered-button" id="options-second" onclick="showOptions(this)">...</button>
+                        </div>
+                    </div>
+
+                    <div class="task-list-item bordered" id="task-list-item-third">
+                        <div class="title-description">
+                            <div class="task-title margened-bottom" id="task_title">
+                                <p id="paragraph-title-third">!!!Title</p>
+                            </div>
+                            <div class="task-description margened-bottom">
+                                <p id="paragraph-description-third">!!!Description</p>
+                            </div>
+                        </div>
+                        <div class="line-container down-stick">
+                            <div class="task-priority" id="priority-third">
+                                !!!Priority
+                            </div>
+                            <button class="bordered-button" id="options-third" onclick="showOptions(this)">...</button>
+                        </div>
+                    </div>
+
+                    <div class="options" id="options">
+                        <button class="rectangle-button" onclick="setDone()">done</button>
+                        <button class="rectangle-button" onclick="editTask()">edit</button>
+                        <button class="rectangle-button" onclick="deleteTask()">delete</button>
+                    </div>
+                </div>
+        </div>
+        </section>
+
+        <section>
+            <div class="form-wrapper" id='form-new-task'>
+                <div class="new-task-form bordered" id="task-form-id">
+                    <label for="title">Title:</label>
+                    <input id="form_title" class="margened-bottom" type="text" placeholder="Type title here..." />
+
+                    <label for="description">Description:</label>
+                    <textarea name="" id="description" class="margened-bottom" cols="30" rows="10"
+                        placeholder="Type description here..."></textarea>
+
+                    <label for="priority">Priority:</label>
+                    <select id="priority" class="margened-bottom">
+                        <option>high</option>
+                        <option>normal</option>
+                        <option>low</option>
+                    </select>
+
+                    <div class="line-container">
+                        <button class="bordered-button" id="cancelButton" onclick="cancelCreatedTask()">Cancel</button>
+                        <button class="bordered-button" id="saveButton" onclick="saveCreatedTask()">Save</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="tasks-footer">
+            <div class="author__name">
+                Dmitriy Shtoda
+            </div>
+        </footer>
+
+    </div>
+
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>
