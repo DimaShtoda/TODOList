@@ -13,20 +13,27 @@ addTask(createTask('1', 'descr 1', 'low'));
 addTask(createTask('2', 'descr 2', 'normal'));
 addTask(createTask('3', 'descr 3', 'high'));
 addTask(createTask('4', 'descr 4', 'low'));
-addTask(createTask('5', 'descr 5', 'normal'));
+addTask(createTask('5', 'descr 5', 'normal', 'done'));
 addTask(createTask('6', 'descr 6', 'high'));
+addTask(createTask('7', 'descr 7', 'low'));
+addTask(createTask('8', 'descr 8', 'normal'));
+addTask(createTask('9', 'descr 9', 'high'));
+addTask(createTask('10', 'descr 10', 'low', 'done'));
+addTask(createTask('11', 'descr 11', 'normal'));
+addTask(createTask('12', 'descr 12', 'high'));
+
 
 rebuildAllTaskListItems();
 
 // Function for data repository
 
-function createTask(aTitle, aDescription, aPriority) {
+function createTask(aTitle, aDescription, aPriority, aStatus = 'open') {
     return {
         id: getFreeTaskId(),
         title: aTitle,
         description: aDescription,
         priority: aPriority,
-        status: 'open'
+        status: aStatus
     };
 }
 
@@ -56,7 +63,7 @@ function updateTask(taskId, task) {
     let index = getIndexOf(taskId);
     let id = tasks[index].id;
     tasks[index] = task;
-    tasks[index] = id;
+    tasks[index].id = id;
 }
 
 function updateTaskStatus(taskId, status) {
@@ -142,10 +149,7 @@ function saveEditTaskItem() {
         document.getElementById('edit-task-item-description').value,
         document.getElementById('edit-task-item-priority').value
     );
-    console.log('edit 1 task = ' + task);
     if (validateTask(task)) {
-        console.log('edit 2 task = ' + task);
-        console.log('edit 2 tasks = ' + tasks);
         if (taskIdSelectedTask >= 0) {
             updateTask(taskIdSelectedTask, task);
             updateTaskListItem(taskIdSelectedTask, task);
@@ -154,7 +158,6 @@ function saveEditTaskItem() {
             addTaskListItem(task.id);
             updateTaskListItem(task.id, task);
         }
-        console.log('edit 3 tasks = ' + tasks);
         setVisibleEditTaskItem(false);
         taskIdSelectedTask = -1;
     } else {
@@ -195,6 +198,7 @@ function addTaskListItem(taskId) {
     appendTaskIdToElementId(getChildById(taskListItem, 'task-list-item-description-'), taskId);
     appendTaskIdToElementId(getChildById(taskListItem, 'task-list-item-priority-'), taskId);
     appendTaskIdToElementId(getChildById(taskListItem, 'task-list-item-options-'), taskId);
+    appendTaskIdToElementId(getChildById(taskListItem, 'task-list-item-done-image-'), taskId);
     taskListItem.id = 'task-list-item-' + taskId;
     taskListItem.style.display = 'flex';
     taskList.append(taskListItem);
@@ -209,6 +213,7 @@ function updateTaskListItem(taskId, task) {
     document.getElementById('task-list-item-title-' + taskId).textContent = task.title;
     document.getElementById('task-list-item-description-' + taskId).textContent = task.description;
     document.getElementById('task-list-item-priority-' + taskId).textContent = task.priority;
+    document.getElementById('task-list-item-done-image-' + taskId).style.visibility = (task.status === 'done') ? 'visible' : 'hidden';
 }
 
 function deleteAllTaskListItems() {
@@ -245,7 +250,7 @@ function showOptions(element) {
     let offset = getOffset(element);
     let optionElement = document.getElementById('options');
     optionElement.style.left = element.getBoundingClientRect().width + offset.left - optionElement.getBoundingClientRect().width + 'px';
-    optionElement.style.top = element.offsetHeight + offset.top + 8 + 'px';
+    optionElement.style.top = element.offsetHeight + offset.top + 'px';
     taskIdSelectedTask = +element.id.slice('task-list-item-options-'.length);
 }
 
@@ -257,7 +262,9 @@ function hideOptions(canClearTaskId) {
 }
 
 function clickDoneTask() {
+    if (taskIdSelectedTask < 0) return;
     updateTaskStatus(taskIdSelectedTask, 'done');
+    updateTaskListItem(taskIdSelectedTask, getTask(taskIdSelectedTask));
     hideOptions(true);
 }
 
@@ -275,3 +282,6 @@ function clickEditTask() {
     hideOptions(false);
 }
 
+function blurOptions() {
+    hideOptions(true);
+}

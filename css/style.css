@@ -30,6 +30,7 @@ body {
 
 .down-stick {
     margin-bottom: 0;
+    vertical-align: bottom;
 }
 
 .margened-bottom {
@@ -114,9 +115,25 @@ a {
 
 .task-list-item {
     width: 300px;
-    display: none;
+    min-height: 200px;
+    display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.done-image {
+    background-color: #fff;
+    position: relative;
+    top: -24px;
+    left: 274px;
+    width: 16px;
+    height: 16px;
+}
+
+.title-description {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 auto;
 }
 
 .task-title {
@@ -147,19 +164,6 @@ a {
     width: 40px;
 }
 
-.edit-task-item {
-    width: 300px;
-    background-color: #fff;
-    display: flex;
-    flex-direction: column;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: auto;
-    margin-bottom: auto;
-    height: 350px;
-    /* display: none; */
-}
-
 .tasks-footer {
     height: 40px;
     border-top: 2px solid #000;
@@ -169,14 +173,18 @@ a {
     flex-basis: auto;
 }
 
-.edit-task-item{
+.edit-task-item {
+    width: 300px;
+    height: 350px;
+    background-color: #fff;
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
-    right: 0;   
+    right: 0;
+    margin: auto auto auto auto;
     display: none;
-    background-color: rgba(0, 0, 0, 0.2);
+    flex-direction: column;
 }
 
 .options {
@@ -190,14 +198,29 @@ a {
 }
 
 .rectangle-button {
-    background-color: #fff;
+    background-color: #bfbfbf;
     border: 1.5px solid #000;
     text-align: center;
     padding: 5px 10px;
+    margin-bottom: -2px;
     outline: none;
+    position: relative;
+}
+
+.rectangle-button:hover {
+    background-color: #fff;
+}
+
+.triangle {
+    position: relative;
+    top: 0;
+    left: 56px;
+    width: 16px;
+    height: 12px;
 }
 
 .task-list {
     display: flex;
     flex-wrap: wrap;
 }
+
