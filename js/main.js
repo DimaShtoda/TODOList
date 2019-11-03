@@ -1,4 +1,5 @@
-// Data repository
+// Data repository.
+// This section emulates data provided by back-end.
 
 let tasks = [];
 let taskIdSelectedTask = -1;
@@ -25,7 +26,8 @@ addTask(createTask('12', 'descr 12', 'high'));
 
 rebuildAllTaskListItems();
 
-// Function for data repository
+// Function for data repository.
+// This section can be modified for using with any database system.
 
 function createTask(aTitle, aDescription, aPriority, aStatus = 'open') {
     return {
@@ -109,7 +111,7 @@ function passedFilter(task) {
         ((filter.status === undefined) || (filter.status === task.status));
 }
 
-
+// Following sections don't need to change for working with database. 
 // Functions for Filter Conditional
 
 function filterChanged() {
