@@ -147,7 +147,7 @@ a {
     width: 40px;
 }
 
-.new-task-form {
+.edit-task-item {
     width: 300px;
     background-color: #fff;
     display: flex;
@@ -169,7 +169,7 @@ a {
     flex-basis: auto;
 }
 
-.form-wrapper{
+.edit-task-item{
     position: fixed;
     top: 0;
     bottom: 0;
@@ -195,4 +195,9 @@ a {
     text-align: center;
     padding: 5px 10px;
     outline: none;
+}
+
+.task-list {
+    display: flex;
+    flex-wrap: wrap;
 }

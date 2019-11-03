@@ -11,117 +11,104 @@
 </head>
 
 <body>
-    <div class="tasks-wrapper">
+<div class="tasks-wrapper">
 
-        <header class="tasks-header">
-            <a href="#">
-                TODOList
-            </a>
-        </header>
+    <header class="tasks-header">
+        <a href="#">TODOList</a>
+    </header>
 
-        <input type="file" id="file">
-        <button onclick="addTaskListItem(3, document.getElementById('file'))">Read!</button>
-        <div id="out"></div>
+    <div class="tasks-content">
 
-
-        <div class="tasks-content">
-
-            <section>
-                <div class="filter-conditional">
-                    <div>
-                        <div class="search">
-                            <input type="text" placeholder="search by tittle"/>
-                            <img class="icon" src="./images/search.png" alt="">
-                        </div>
-                    </div>
-                    <div class="filter-status">
-                        <select>
-                            <option>all</option>
-                            <option>open</option>
-                            <option>done</option>
-                        </select>
-                    </div>
-                    <div class="filter-priority">
-                        <select>
-                            <option>all</option>
-                            <option>high</option>
-                            <option>normal</option>
-                            <option>low</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <button class="bordered-button search-button" id="createButton"
-                            onclick="createForm()">Create</button>
-                    </div>
+        <div class="filter-conditional">
+            <div>
+                <div class="search">
+                    <input id="filter-conditional-title" type="text" placeholder="search by tittle"
+                           onchange="filterChanged()"/>
+                    <img class="icon" src="./images/search.png" alt="">
                 </div>
-            </section>
+            </div>
+            <div class="filter-status">
+                <select id="filter-conditional-status" onchange="filterChanged()">
+                    <option>all</option>
+                    <option>open</option>
+                    <option>done</option>
+                </select>
+            </div>
+            <div class="filter-priority">
+                <select id="filter-conditional-priority" onchange="filterChanged()">
+                    <option>all</option>
+                    <option>high</option>
+                    <option>normal</option>
+                    <option>low</option>
+                </select>
+            </div>
 
-            <section>
-                <div id="task-list" class="task-list line-container">
-
-                    <div id="task-list-item-template" class="task-list-item bordered">
-                        <div class="title-description">
-                            <div class="task-title margened-bottom">
-                                <p id="task-list-item-title-">!!!Title</p>
-                            </div>
-                            <div class="task-description margened-bottom">
-                                <p id="task-list-item-description-">!!!Description</p>
-                            </div>
-                        </div>
-                        <div class="line-container down-stick">
-                            <div id="task-list-item-priority-" class="task-priority">
-                                !!!Priority
-                            </div>
-                            <button id="task-list-item-options-" class="bordered-button" onclick="showOptions(this)">...</button>
-                        </div>
-                    </div>
-
-                    <div id="options" class="options">
-                        <button class="rectangle-button" onclick="clickDoneTask()">done</button>
-                        <button class="rectangle-button" onclick="clickEditTask()">edit</button>
-                        <button class="rectangle-button" onclick="clickDeleteTask()">delete</button>
-                    </div>
-
-                </div>
-            </section>
+            <div>
+                <button class="bordered-button search-button" onclick="clickCreateTask()">
+                    Create
+                </button>
+            </div>
         </div>
 
-        <section>
-            <div class="form-wrapper" id='form-new-task'>
-                <div class="new-task-form bordered" id="task-form-id">
-                    <label for="form_title">Title:</label>
-                    <input id="form_title" class="margened-bottom" type="text" placeholder="Type title here..." />
+        <div id="task-list" class="task-list line-container">
 
-                    <label for="description">Description:</label>
-                    <textarea name="" id="description" class="margened-bottom" cols="30" rows="10"
-                        placeholder="Type description here..."></textarea>
-
-                    <label for="priority">Priority:</label>
-                    <select id="priority" class="margened-bottom">
-                        <option>high</option>
-                        <option>normal</option>
-                        <option>low</option>
-                    </select>
-
-                    <div class="line-container">
-                        <button class="bordered-button" id="cancelButton" onclick="cancelCreatedTask()">Cancel</button>
-                        <button class="bordered-button" id="saveButton" onclick="saveCreatedTask()">Save</button>
+            <div id="task-list-item-template" class="task-list-item bordered">
+                <div class="title-description">
+                    <p id="task-list-item-title-" class="task-title margened-bottom">!!!Title</p>
+                    <p id="task-list-item-description-" class="task-description margened-bottom">!!!Description</p>
+                </div>
+                <div class="line-container down-stick">
+                    <div id="task-list-item-priority-" class="task-priority">
+                        !!!Priority
                     </div>
+                    <button id="task-list-item-options-" class="bordered-button" onclick="showOptions(this)">
+                        ...
+                    </button>
                 </div>
             </div>
-        </section>
 
-        <footer class="tasks-footer">
-            <div class="author__name">
-                Dmitriy Shtoda
+            <div id="options" class="options">
+                <button class="rectangle-button" onclick="clickDoneTask()">done</button>
+                <button class="rectangle-button" onclick="clickEditTask()">edit</button>
+                <button class="rectangle-button" onclick="clickDeleteTask()">delete</button>
             </div>
-        </footer>
+
+        </div>
+    </div>
+
+    <div id='edit-task-item' class="edit-task-item bordered">
+
+        <label for="edit-task-item-title">Title:</label>
+        <input id="edit-task-item-title" class="margened-bottom" type="text" placeholder="Type title here..."/>
+
+        <label for="edit-task-item-description">Description:</label>
+        <textarea name="" id="edit-task-item-description" class="margened-bottom" cols="30" rows="10"
+                  placeholder="Type description here..."></textarea>
+
+        <label for="edit-task-item-priority">Priority:</label>
+        <select id="edit-task-item-priority" class="margened-bottom">
+            <option>high</option>
+            <option>normal</option>
+            <option>low</option>
+        </select>
+
+        <div class="line-container">
+            <button class="bordered-button" onclick="clickCancelEditTaskItem()">Cancel</button>
+            <button class="bordered-button" onclick="clickSaveEditTaskItem()">Save</button>
+        </div>
 
     </div>
 
+    <footer class="tasks-footer">
+        <div class="author-name">
+            Dmitriy Shtoda
+        </div>
+    </footer>
 
-    <script src="js/main.js"></script>
+</div>
+
+
+<script src="js/main.js"></script>
 </body>
 
 </html>

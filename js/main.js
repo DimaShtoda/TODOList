@@ -1,124 +1,234 @@
-let tasks = new Array();
-let indexActiveTask = -1;
+// Data repository
 
-tasks[0] = {
-    title: '1',
-    description: 'a',
-    priority: 'high'
-};
-tasks[1] = {
-    title: '2',
-    description: 'b',
-    priority: 'normal'
-};
-tasks[2] = {
-    title: '3',
-    description: 'c',
-    priority: 'low'
+let tasks = [];
+let taskIdSelectedTask = -1;
+let freeTaskId = 0;
+let filter = {
+    title: undefined,
+    priority: undefined,
+    status: undefined
 };
 
-// addTaskListItem(3);
-updateTasksList(tasks);
+addTask(createTask('1', 'descr 1', 'low'));
+addTask(createTask('2', 'descr 2', 'normal'));
+addTask(createTask('3', 'descr 3', 'high'));
+addTask(createTask('4', 'descr 4', 'low'));
+addTask(createTask('5', 'descr 5', 'normal'));
+addTask(createTask('6', 'descr 6', 'high'));
+
+rebuildAllTaskListItems();
+
+// Function for data repository
 
 function createTask(aTitle, aDescription, aPriority) {
-    let task = {
+    return {
+        id: getFreeTaskId(),
         title: aTitle,
         description: aDescription,
         priority: aPriority,
         status: 'open'
     };
-    return task;
 }
 
 function addTask(task) {
     tasks.push(task);
 }
 
-function updateTask(index, task) {
-    tasks[index] = task;
+function getTask(taskId) {
+    return tasks[getIndexOf(taskId)];
 }
 
-function removeTask(index) {
-    console.log(index);
-    console.log(tasks);
-    tasks.splice(index, 1)
-    console.log(tasks);
+function getFreeTaskId() {
+    return ++freeTaskId;
+    // return tasks.length;
 }
 
-function visibleFormNewTask(isVisible) {
-    if (isVisible) {
-        document.getElementById('form-new-task').style.display = 'flex';
-        if (indexActiveTask >= 0) {
-            document.getElementById('form_title').value = tasks[indexActiveTask].title;
-            document.getElementById('description').value = tasks[indexActiveTask].description;
-            document.getElementById('priority').value = tasks[indexActiveTask].priority;
+function getIndexOf(taskId) {
+    for (let i = 0; i < tasks.length; i++) {
+        if (tasks[i].id === taskId) {
+            return i;
         }
-    } else {
-        document.getElementById('form-new-task').style.display = 'none';
     }
+    return undefined;
 }
 
-function visibleListItem(count) {
-    document.getElementById('task-list-item-third').style.display = (count > 2) ? 'flex' : 'none';
-    document.getElementById('task-list-item-second').style.display = (count > 1) ? 'flex' : 'none';
-    document.getElementById('task-list-item-first').style.display = (count > 0) ? 'flex' : 'none';
+function updateTask(taskId, task) {
+    let index = getIndexOf(taskId);
+    let id = tasks[index].id;
+    tasks[index] = task;
+    tasks[index] = id;
 }
 
-function createForm() {
-    visibleFormNewTask(true);
+function updateTaskStatus(taskId, status) {
+    tasks[getIndexOf(taskId)].status = status;
+}
+
+function deleteTask(taskId) {
+    tasks.splice(getIndexOf(taskId), 1)
 }
 
 function validateTask(task) {
-    if (task.title == undefined || task.title == null || task.title == '' ||
-        task.description == undefined || task.description == null || task.description == '' ||
-        task.priority == undefined || task.priority == null || task.priority == '') {
-        return false;
-    }
-    return true;
+    return !(
+        task.title === undefined || task.title == null || task.title === '' ||
+        task.description === undefined || task.description === '' ||
+        task.priority === undefined || task.priority === ''
+    );
 }
 
-function saveCreatedTask() {
-    let task;
-    if (indexActiveTask >= 0) {
-        task = tasks[indexActiveTask];
-    } else {
-        task = createTask(document.getElementById('form_title').value, document.getElementById('description').value, document.getElementById('priority').value);
+function forEachTask(func) {
+    let i = 0;
+    while (i < tasks.length) {
+        if (passedFilter(tasks[i])) {
+            let l = tasks.length;
+            func(tasks[i].id, tasks[i]);
+            if (tasks.length >= l) {
+                i++;
+            }
+        } else {
+            i++;
+        }
     }
-    if (validateTask(task) == true) {
-        if (indexActiveTask >= 0) {
-            updateTask(indexActiveTask, task);
+}
+
+function setFilter(aTitle, aStatus, aPriority) {
+    filter.title = (aTitle === '') ? undefined : aTitle;
+    filter.status = (aStatus === 'all') ? undefined : aStatus;
+    filter.priority = (aPriority === 'all') ? undefined : aPriority;
+}
+
+function passedFilter(task) {
+    return ((filter.title === undefined) || (task.title.indexOf(filter.title) >= 0 )) &&
+        ((filter.priority === undefined) || (filter.priority === task.priority)) &&
+        ((filter.status === undefined) || (filter.status === task.status));
+}
+
+
+// Functions for Filter Conditional
+
+function filterChanged() {
+    deleteAllTaskListItems();
+    setFilter(
+        document.getElementById('filter-conditional-title').value,
+        document.getElementById('filter-conditional-status').value,
+        document.getElementById('filter-conditional-priority').value
+    );
+    rebuildAllTaskListItems();
+}
+
+function clickCreateTask() {
+    setVisibleEditTaskItem(true);
+}
+
+
+// Functions for Edit Task Item
+
+function updateEditTaskItem(task) {
+    document.getElementById('edit-task-item-title').value = task.title;
+    document.getElementById('edit-task-item-description').value = task.description;
+    document.getElementById('edit-task-item-priority').value = task.priority;
+}
+
+function setVisibleEditTaskItem(isVisible) {
+    if (isVisible) {
+        document.getElementById('edit-task-item').style.display = 'flex';
+    } else {
+        document.getElementById('edit-task-item').style.display = 'none';
+    }
+}
+
+function saveEditTaskItem() {
+    let task = createTask(
+        document.getElementById('edit-task-item-title').value,
+        document.getElementById('edit-task-item-description').value,
+        document.getElementById('edit-task-item-priority').value
+    );
+    console.log('edit 1 task = ' + task);
+    if (validateTask(task)) {
+        console.log('edit 2 task = ' + task);
+        console.log('edit 2 tasks = ' + tasks);
+        if (taskIdSelectedTask >= 0) {
+            updateTask(taskIdSelectedTask, task);
+            updateTaskListItem(taskIdSelectedTask, task);
         } else {
             addTask(task);
+            addTaskListItem(task.id);
+            updateTaskListItem(task.id, task);
         }
-        visibleFormNewTask(false);
-        updateTasksList(tasks);
-        indexActiveTask = -1;
+        console.log('edit 3 tasks = ' + tasks);
+        setVisibleEditTaskItem(false);
+        taskIdSelectedTask = -1;
     } else {
         alert('Заполнить все поля!');
     }
 }
 
-function updateTasksList(tasks) {
-    if (tasks.length > 0) {
-        updateTaskItem(0, tasks[0]);
-    }
-    if (tasks.length > 1) {
-        updateTaskItem(1, tasks[1]);
-    }
-    if (tasks.length > 2) {
-        updateTaskItem(2, tasks[2]);
-    }
-    visibleListItem(tasks.length);
+function clickSaveEditTaskItem() {
+    saveEditTaskItem();
 }
 
-function cancelCreatedTask() {
-    visibleFormNewTask(false);
+function clickCancelEditTaskItem() {
+    setVisibleEditTaskItem(false);
 }
 
+
+// Functions for Task List Item
+
+function appendTaskIdToElementId(element, taskId) {
+    element.id = element.id + taskId;
+}
+
+function getChildById(element, id) {
+    let elements = element.getElementsByTagName('*');
+    for (let i = 0; i < elements.length; i++) {
+        if (elements[i].id === id) {
+            return elements[i];
+        }
+    }
+    return undefined;
+}
+
+function addTaskListItem(taskId) {
+    let taskList = document.getElementById('task-list');
+    let taskListItemTemplate = document.getElementById('task-list-item-template');
+    let taskListItem = taskListItemTemplate.cloneNode(true);
+    appendTaskIdToElementId(getChildById(taskListItem, 'task-list-item-title-'), taskId);
+    appendTaskIdToElementId(getChildById(taskListItem, 'task-list-item-description-'), taskId);
+    appendTaskIdToElementId(getChildById(taskListItem, 'task-list-item-priority-'), taskId);
+    appendTaskIdToElementId(getChildById(taskListItem, 'task-list-item-options-'), taskId);
+    taskListItem.id = 'task-list-item-' + taskId;
+    taskListItem.style.display = 'flex';
+    taskList.append(taskListItem);
+}
+
+function deleteTaskListItem(taskId) {
+    let taskListItem = document.getElementById('task-list-item-' + taskId);
+    if (taskListItem) taskListItem.remove();
+}
+
+function updateTaskListItem(taskId, task) {
+    document.getElementById('task-list-item-title-' + taskId).textContent = task.title;
+    document.getElementById('task-list-item-description-' + taskId).textContent = task.description;
+    document.getElementById('task-list-item-priority-' + taskId).textContent = task.priority;
+}
+
+function deleteAllTaskListItems() {
+    forEachTask((taskId, task) => {
+        deleteTaskListItem(taskId);
+    });
+}
+
+function rebuildAllTaskListItems() {
+    forEachTask((taskId, task) => {
+        addTaskListItem(taskId);
+        updateTaskListItem(taskId, task)
+    });
+}
+
+// Functions for Options
 
 function getOffset(element) {
-    var x = 0;
-    var y = 0;
+    let x = 0;
+    let y = 0;
     while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
         x += element.offsetLeft - element.scrollLeft;
         y += element.offsetTop - element.scrollTop;
@@ -130,74 +240,38 @@ function getOffset(element) {
     };
 }
 
-// Functions for Options
-
 function showOptions(element) {
     document.getElementById('options').style.display = 'flex';
     let offset = getOffset(element);
     let optionElement = document.getElementById('options');
     optionElement.style.left = element.getBoundingClientRect().width + offset.left - optionElement.getBoundingClientRect().width + 'px';
     optionElement.style.top = element.offsetHeight + offset.top + 8 + 'px';
-    indexActiveTask = +element.id.slice("task-list-item-options-".length);
+    taskIdSelectedTask = +element.id.slice('task-list-item-options-'.length);
 }
 
-function hideOptions(canClearIndex) {
+function hideOptions(canClearTaskId) {
     document.getElementById('options').style.display = 'none';
-    if (canClearIndex) {
-        indexActiveTask = -1;
+    if (canClearTaskId) {
+        taskIdSelectedTask = -1;
     }
 }
 
 function clickDoneTask() {
-    tasks[indexActiveTask].status = 'done';
+    updateTaskStatus(taskIdSelectedTask, 'done');
     hideOptions(true);
 }
 
 function clickDeleteTask() {
-    removeTask(indexActiveTask);
-    updateTasksList(tasks);
+    if (taskIdSelectedTask < 0) return;
+    deleteTaskListItem(taskIdSelectedTask);
+    deleteTask(taskIdSelectedTask);
     hideOptions(true);
 }
 
 function clickEditTask() {
-    visibleFormNewTask(true);
+    if (taskIdSelectedTask < 0) return;
+    setVisibleEditTaskItem(true);
+    updateEditTaskItem(getTask(taskIdSelectedTask));
     hideOptions(false);
 }
 
-// Functions for Task List Item
-
-function appendIndexToId(element, index) {
-    element.id = element.id + index;
-}
-
-function addTaskListItem(index, count) {
-    let taskList = document.getElementById('task-list');
-    let taskListItemTemplate = document.getElementById('task-list-item-template');
-    for (let i = 0; i < count; i++) {
-        let taskListItem = taskListItemTemplate.cloneNode(true);
-        appendIndexToId(taskListItem.getElementById('task-list-item-title-'), index);
-        appendIndexToId(taskListItem.getElementById('task-list-item-description-'), index);
-        appendIndexToId(taskListItem.getElementById('task-list-item-priority-'), index);
-        appendIndexToId(taskListItem.getElementById('task-list-item-options-'), index);
-        taskListItem.id = 'task-list-item-' + index;
-        index++;
-        taskListItem.style.display = 'flex';
-        taskList.append(taskListItem);
-    }
-}
-
-function deleteTaskListItem(index, count) {
-    let taskList = document.getElementById('task-list');
-    for (let i = 0; i < count; i++) {
-        let taskListItem = document.getElementById('task-list-item-' + index);
-        taskListItem.remove();
-        index++;
-        taskList.append(taskListItem);
-    }
-}
-
-function updateTaskListItem(index, task) {
-    document.getElementById('paragraph-title-' + index).textContent = task.title;
-    document.getElementById('paragraph-description-' + index).textContent = task.description;
-    document.getElementById('priority-' + index).textContent = task.priority;
-}
