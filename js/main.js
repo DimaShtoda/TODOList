@@ -17,6 +17,7 @@ tasks[2] = {
     priority: 'low'
 };
 
+// addTaskListItem(3);
 updateTasksList(tasks);
 
 function createTask(aTitle, aDescription, aPriority) {
@@ -97,13 +98,6 @@ function saveCreatedTask() {
     }
 }
 
-function updateTaskItem(indexOfListItem, task) {
-    let sufix = ['first', 'second', 'third'];
-    document.getElementById('paragraph-title-' + sufix[indexOfListItem]).textContent = task.title;
-    document.getElementById('paragraph-description-' + sufix[indexOfListItem]).textContent = task.description;
-    document.getElementById('priority-' + sufix[indexOfListItem]).textContent = task.priority;
-}
-
 function updateTasksList(tasks) {
     if (tasks.length > 0) {
         updateTaskItem(0, tasks[0]);
@@ -136,19 +130,15 @@ function getOffset(element) {
     };
 }
 
+// Functions for Options
+
 function showOptions(element) {
     document.getElementById('options').style.display = 'flex';
     let offset = getOffset(element);
     let optionElement = document.getElementById('options');
     optionElement.style.left = element.getBoundingClientRect().width + offset.left - optionElement.getBoundingClientRect().width + 'px';
     optionElement.style.top = element.offsetHeight + offset.top + 8 + 'px';
-    if (element.id == 'options-first') {
-        indexActiveTask = 0;
-    } else if (element.id == 'options-second') {
-        indexActiveTask = 1;
-    } else {
-        indexActiveTask = 2;
-    }
+    indexActiveTask = +element.id.slice("task-list-item-options-".length);
 }
 
 function hideOptions(canClearIndex) {
@@ -158,18 +148,56 @@ function hideOptions(canClearIndex) {
     }
 }
 
-function doneTask() {
+function clickDoneTask() {
     tasks[indexActiveTask].status = 'done';
     hideOptions(true);
 }
 
-function deleteTask() {
+function clickDeleteTask() {
     removeTask(indexActiveTask);
     updateTasksList(tasks);
     hideOptions(true);
 }
 
-function editTask() {
+function clickEditTask() {
     visibleFormNewTask(true);
     hideOptions(false);
+}
+
+// Functions for Task List Item
+
+function appendIndexToId(element, index) {
+    element.id = element.id + index;
+}
+
+function addTaskListItem(index, count) {
+    let taskList = document.getElementById('task-list');
+    let taskListItemTemplate = document.getElementById('task-list-item-template');
+    for (let i = 0; i < count; i++) {
+        let taskListItem = taskListItemTemplate.cloneNode(true);
+        appendIndexToId(taskListItem.getElementById('task-list-item-title-'), index);
+        appendIndexToId(taskListItem.getElementById('task-list-item-description-'), index);
+        appendIndexToId(taskListItem.getElementById('task-list-item-priority-'), index);
+        appendIndexToId(taskListItem.getElementById('task-list-item-options-'), index);
+        taskListItem.id = 'task-list-item-' + index;
+        index++;
+        taskListItem.style.display = 'flex';
+        taskList.append(taskListItem);
+    }
+}
+
+function deleteTaskListItem(index, count) {
+    let taskList = document.getElementById('task-list');
+    for (let i = 0; i < count; i++) {
+        let taskListItem = document.getElementById('task-list-item-' + index);
+        taskListItem.remove();
+        index++;
+        taskList.append(taskListItem);
+    }
+}
+
+function updateTaskListItem(index, task) {
+    document.getElementById('paragraph-title-' + index).textContent = task.title;
+    document.getElementById('paragraph-description-' + index).textContent = task.description;
+    document.getElementById('priority-' + index).textContent = task.priority;
 }

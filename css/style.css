@@ -13,6 +13,10 @@ body {
     box-sizing: inherit;
 }
 
+#task-list-item-template {
+    display: none;
+}
+
 .bordered {
     border: 2px solid #000;
     padding: 15px;

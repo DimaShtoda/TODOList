@@ -19,13 +19,18 @@
             </a>
         </header>
 
+        <input type="file" id="file">
+        <button onclick="addTaskListItem(3, document.getElementById('file'))">Read!</button>
+        <div id="out"></div>
+
+
         <div class="tasks-content">
 
             <section>
                 <div class="filter-conditional">
                     <div>
                         <div class="search">
-                            <input type="text" placeholder="search by tittle" />
+                            <input type="text" placeholder="search by tittle"/>
                             <img class="icon" src="./images/search.png" alt="">
                         </div>
                     </div>
@@ -53,71 +58,39 @@
             </section>
 
             <section>
-                <div class="task-list line-container">
-                    <div class="task-list-item bordered" id="task-list-item-first">
+                <div id="task-list" class="task-list line-container">
+
+                    <div id="task-list-item-template" class="task-list-item bordered">
                         <div class="title-description">
-                            <div class="task-title margened-bottom" id="task_title">
-                                <p id="paragraph-title-first">!!!Title</p>
+                            <div class="task-title margened-bottom">
+                                <p id="task-list-item-title-">!!!Title</p>
                             </div>
                             <div class="task-description margened-bottom">
-                                <p id="paragraph-description-first">!!!Description</p>
+                                <p id="task-list-item-description-">!!!Description</p>
                             </div>
                         </div>
                         <div class="line-container down-stick">
-                            <div class="task-priority" id="priority-first">
+                            <div id="task-list-item-priority-" class="task-priority">
                                 !!!Priority
                             </div>
-                            <button class="bordered-button" id="options-first" onclick="showOptions(this)">...</button>
+                            <button id="task-list-item-options-" class="bordered-button" onclick="showOptions(this)">...</button>
                         </div>
                     </div>
 
-                    <div class="task-list-item bordered" id="task-list-item-second">
-                        <div class="title-description">
-                            <div class="task-title margened-bottom" id="task_title">
-                                <p id="paragraph-title-second">!!!Title</p>
-                            </div>
-                            <div class="task-description margened-bottom">
-                                <p id="paragraph-description-second">!!!Description</p>
-                            </div>
-                        </div>
-                        <div class="line-container down-stick">
-                            <div class="task-priority" id="priority-second">
-                                !!!Priority
-                            </div>
-                            <button class="bordered-button" id="options-second" onclick="showOptions(this)">...</button>
-                        </div>
+                    <div id="options" class="options">
+                        <button class="rectangle-button" onclick="clickDoneTask()">done</button>
+                        <button class="rectangle-button" onclick="clickEditTask()">edit</button>
+                        <button class="rectangle-button" onclick="clickDeleteTask()">delete</button>
                     </div>
 
-                    <div class="task-list-item bordered" id="task-list-item-third">
-                        <div class="title-description">
-                            <div class="task-title margened-bottom" id="task_title">
-                                <p id="paragraph-title-third">!!!Title</p>
-                            </div>
-                            <div class="task-description margened-bottom">
-                                <p id="paragraph-description-third">!!!Description</p>
-                            </div>
-                        </div>
-                        <div class="line-container down-stick">
-                            <div class="task-priority" id="priority-third">
-                                !!!Priority
-                            </div>
-                            <button class="bordered-button" id="options-third" onclick="showOptions(this)">...</button>
-                        </div>
-                    </div>
-
-                    <div class="options" id="options">
-                        <button class="rectangle-button" onclick="setDone()">done</button>
-                        <button class="rectangle-button" onclick="editTask()">edit</button>
-                        <button class="rectangle-button" onclick="deleteTask()">delete</button>
-                    </div>
                 </div>
+            </section>
         </div>
-        </section>
 
         <section>
             <div class="form-wrapper" id='form-new-task'>
                 <div class="new-task-form bordered" id="task-form-id">
-                    <label for="title">Title:</label>
+                    <label for="form_title">Title:</label>
                     <input id="form_title" class="margened-bottom" type="text" placeholder="Type title here..." />
 
                     <label for="description">Description:</label>
@@ -147,7 +120,6 @@
 
     </div>
 
-    </div>
 
     <script src="js/main.js"></script>
 </body>
